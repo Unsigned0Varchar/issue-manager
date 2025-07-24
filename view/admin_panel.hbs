@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Issue Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #2d2d2d, #3a3a3a);
+      padding: 40px 20px;
+      min-height: 100vh;
+      color: #f0f0f0;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #ffffff;
+    }
+
+    table {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      border-collapse: collapse;
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    th, td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e0e0e0;
+      font-size: 14px;
+    }
+
+    th {
+      background: rgba(0, 119, 255, 0.15);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .status-select {
+      padding: 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(6px);
+      font-size: 14px;
+    }
+
+    .status-select option {
+      background: #2c2c2c;
+      color: #fff;
+    }
+
+    .logout-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: crimson;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      z-index: 99;
+    }
+
+    .logout-btn:hover {
+      background-color: darkred;
+    }
+
+    .filter-form {
+      max-width: 1200px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      color: #ffffff;
+    }
+
+    .filter-form select, .filter-form button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      border: none;
+      outline: none;
+    }
+
+    .filter-form select {
+      background-color: #444;
+      color: white;
+    }
+
+    .filter-form button {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .filter-form button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tr {
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 12px;
+        padding: 14px;
+      }
+
+      td {
+        padding-left: 50%;
+        position: relative;
+        text-align: right;
+        border-bottom: none;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        font-weight: bold;
+        color: #bbb;
+        text-align: left;
+      }
+
+      .filter-form {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 20px;
+      }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #28a745;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      z-index: 9999;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, 50px); }
+      to   { opacity: 1; transform: translate(-50%, 0); }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="logout-btn" onclick="window.location.href='/logout'">Logout</button>
+
+  <h1>Admin Dashboard - Manage Issues</h1>
+
+  <!-- 🔍 Filter Section -->
+  <form method="GET" action="/admin_panel" class="filter-form">
+    <label for="status">Status:</label>
+    <select name="status" id="status">
+      <option value="" {{#unless filterStatus}}selected{{/unless}}>All</option>
+      <option value="pending" {{#ifCond filterStatus '==' 'pending'}}selected{{/ifCond}}>Pending</option>
+      <option value="resolved" {{#ifCond filterStatus '==' 'resolved'}}selected{{/ifCond}}>Resolved</option>
+    </select>
+
+    <label for="sort">Sort:</label>
+    <select name="sort" id="sort">
+      <option value="newest" {{#ifCond filterSort '==' 'newest'}}selected{{/ifCond}}>Newest First</option>
+      <option value="oldest" {{#ifCond filterSort '==' 'oldest'}}selected{{/ifCond}}>Oldest First</option>
+    </select>
+
+    <button type="submit">Go</button>
+  </form>
+
+  <!-- 📋 Issue Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Subject</th>
+        <th>Description</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each issues}}
+      <tr>
+        <td data-label="ID">{{this.id}}</td>
+        <td data-label="Username">{{this.username}}</td>
+        <td data-label="Email">{{this.email}}</td>
+        <td data-label="Department">{{this.department}}</td>
+        <td data-label="Subject">{{this.subject}}</td>
+        <td data-label="Description">{{this.description}}</td>
+        <td data-label="Status">
+          <form method="POST" action="/admin/updateStatus">
+            <input type="hidden" name="id" value="{{this.id}}" />
+            <input type="hidden" name="email" value="{{this.email}}" />
+            <input type="hidden" name="subject" value="{{this.subject}}" />
+            <select name="status" class="status-select" onchange="this.form.submit()">
+              <option value="pending" {{#ifCond this.status '==' 'pending'}}selected{{/ifCond}}>Pending</option>
+              <option value="resolved" {{#ifCond this.status '==' 'resolved'}}selected{{/ifCond}}>Resolved</option>
+            </select>
+          </form>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <script>
+    function showToast(message, success = true) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = message;
+      toast.style.backgroundColor = success ? "#28a745" : "#dc3545";
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("resolvedmail") === "sent") {
+      showToast("✅ Resolved confirmation email sent to issue raiser!");
+    } else if (params.get("resolvedmail") === "fail") {
+      showToast("❌ Failed to send confirmation email.");
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Online Issue Management System</title>
+  <link rel="stylesheet" href="./style.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .background {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(-45deg, #00c9ff, #92fe9d, #4158d0, #c850c0);
+      background-size: 400% 400%;
+      animation: gradientSlide 20s ease infinite;
+      z-index: -1;
+    }
+
+    @keyframes gradientSlide {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(12px);
+      padding: 16px 32px;
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #ffeb3b;
+    }
+
+    .auth-buttons a {
+      background-color: #ffeb3b;
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .auth-buttons a:hover {
+      background-color: #fff176;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 80px);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .hero-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 50px 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(14px);
+      color: #fff;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-box h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .hero-box p {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .hero-box {
+        padding: 30px 20px;
+      }
+
+      .hero-box h1 {
+        font-size: 28px;
+      }
+
+      .hero-box p {
+        font-size: 16px;
+      }
+
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <header>
+    <nav class="navbar">
+      <div class="logo">IssueTracker</div>
+      <ul class="nav-links">
+        <span>Created With ❤️ by Abhikraj in GIMT Internship</span>
+      </ul>
+      <div class="auth-buttons">
+        <a href="/login" class="btn">Login</a>
+        <a href="/signup" class="btn">Sign Up</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-box">
+      <h1>Online Issue Management System</h1>
+      <p>Smartly manage and track your issues in a clean, modern interface. Raise, review, and resolve problems easily with our intuitive system.</p>
+    </div>
+  </section>
+</body>
+</html>

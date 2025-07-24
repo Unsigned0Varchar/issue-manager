@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Raise an Issue</title>
+  <link rel="stylesheet" href="./issueFormCss.css">
+  <style>
+    /* Toast Styling */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #28a745;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      z-index: 9999;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <button onclick="window.location.href='/logout'" style="position: absolute; top: 10px; right: 10px; background-color: red; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
+    Logout
+  </button>
+
+  <a href="/issue_list" onclick="location.reload()" style="
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: rgb(193, 13, 154);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: sans-serif;
+    display: inline-block;
+  ">
+    👀 View Your Issues
+  </a>
+
+  <div class="container">
+    <form class="issue-form" method="post" action="/userIssue">
+      {{#if checkmesg}}
+      <h3 style="color: red">Invalid Credential.</h3>
+      {{/if}}
+      <h2>Raise an Issue</h2>
+
+      <label for="department">Select Department</label>
+      <select id="department" name="department" required>
+        <option value="">--Choose Department--</option>
+        <option value="IT">IT</option>
+        <option value="HR">HR</option>
+        <option value="Finance">Finance</option>
+        <option value="Others">Others</option>
+      </select>
+
+      <label for="subject" name="subject">Subject</label>
+      <input type="text" id="subject" name="subject" placeholder="Issue subject" required>
+
+      <label for="description">Issue Description</label>
+      <textarea id="description" name="description" placeholder="Describe the issue" rows="5" required></textarea>
+
+      <button type="submit">Submit Issue</button>
+    </form>
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toast">✅ Issue submitted successfully!</div>
+
+  <!-- Toast Script -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("submitted") === "true") {
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+
+      // Auto hide toast
+      setTimeout(() => {
+        toast.classList.remove("show");
+        // Clean URL (remove query param)
+        window.history.replaceState({}, document.title, window.location.pathname);
+        // Optional redirect
+        window.location.href = "/issue_table"; 
+      }, 2500);
+    }
+  </script>
+
+</body>
+</html>
