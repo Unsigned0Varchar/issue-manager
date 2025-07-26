@@ -174,7 +174,7 @@ app.post("/login", async (req, res) => {
   const { email, cpassword } = req.body;
 
   // admin login still works using fixed credentials
-  if (email === "admin@admin.com" && cpassword === "admin123") {
+  if (email === process.env.ADMIN_EMAIL && cpassword === process.env.ADMIN_PASSWORD) {
     req.session.user = { name: "admin", role: "admin" };
     return res.redirect("/admin_panel");
   }
