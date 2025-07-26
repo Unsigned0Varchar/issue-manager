@@ -58,6 +58,10 @@ app.use(express.urlencoded({extended:true}));
 
 //routes
 app.get("/", (req, res) => {
+  res.send("App is running!");
+});
+
+app.get("/", (req, res) => {
     res.render("index")
 });
 
@@ -489,7 +493,7 @@ app.post("/send-admin-credentials", async (req, res) => {
 });
 
 //Create Server
-app.listen(port, (err) => {
+app.listen(port, "0.0.0.0" , (err) => {
     if (err)
         throw err
     else
